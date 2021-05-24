@@ -2,10 +2,10 @@ import cv2
 import numpy as np
 from scipy.sparse import linalg as linalg
 from scipy.sparse import lil_matrix as lil_matrix
+
 OMEGA = 0
 DEL_OMEGA = 1
 OUTSIDE = 2
-
 
 def point_location(index, mask):
     if in_omega(index,mask) == False:
@@ -13,7 +13,6 @@ def point_location(index, mask):
     if edge(index,mask) == True:
         return DEL_OMEGA
     return OMEGA
-
 
 def in_omega(index, mask):
     return mask[index] == 1
@@ -42,13 +41,11 @@ def get_surrounding(index):
     return [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]
 
 def poisson_sparse_matrix(points):
-    N = len(list(points))
-    print(N)
+    N = len(points)
     A = lil_matrix((N,N))
-
     for i,index in enumerate(points):
         A[i,i] = 4
-        for x in get_surrounding(index):n
+        for x in get_surrounding(index):
             if x not in points: continue
             j = points.index(x)
             A[i,j] = -1
@@ -72,9 +69,10 @@ def process(source, target, mask):
 
 def preview(source, target, mask):
     return (target * (1.0 - mask)) + (source * (mask))
-source="F16Source.jpg"
-target="F16Target.jpg"
-mask_dist="F16Mask.jpg"
+
+source="F16-source.jpg"
+target="F16-target.jpg"
+mask_dist="F16-mask.jpg"
 source_img=cv2.imread(source,cv2.IMREAD_COLOR)
 target_img=cv2.imread(target,cv2.IMREAD_COLOR)
 
